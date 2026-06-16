@@ -59,6 +59,13 @@ export default function App() {
             {/* Catch-all */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
+             <button
+            className="theme-toggle"
+            style={{ position:'fixed', bottom:20, right:20, zIndex:500 }}
+            onClick={() => setTheme(t => t === 'dark' ? 'light' : 'dark')}
+          >
+            {theme === 'dark' ? '☀️' : '🌙'}
+          </button>
         </ToastProvider>
       </AuthProvider>
     </BrowserRouter>
