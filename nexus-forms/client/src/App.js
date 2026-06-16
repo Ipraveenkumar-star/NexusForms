@@ -30,6 +30,12 @@ function Guest({ children }) {
 }
 
 export default function App() {
+    const [theme, setTheme] = useState(localStorage.getItem('nf_theme') || 'dark');
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('nf_theme', theme);
+  }, [theme]);
   return (
     <BrowserRouter>
       <AuthProvider>
