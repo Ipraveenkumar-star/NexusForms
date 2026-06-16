@@ -91,10 +91,16 @@ export default function FormBuilder() {
     updateQ(qid, { options: opts });
   };
 
-  const handlePublish = async () => {
+  /*const handlePublish = async () => {
     const { data } = await api.put(`/api/forms/${id}`, { ...form, isPublished:true });
     setForm(data);
-  };
+  };*/
+
+  const handlePublish = async () => {
+  const { data } = await api.put(`/api/forms/${id}`, { ...form, isPublished:true });
+  setForm(data);
+  return data;
+};
 
   if (!form) return (
     <AppShell title="Form Builder">

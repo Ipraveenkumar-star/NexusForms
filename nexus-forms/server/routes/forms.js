@@ -41,6 +41,26 @@ router.post('/', auth, async (req, res) => {
 // PUT /api/forms/:id  — update
 router.put('/:id', auth, async (req, res) => {
   try {
+    const updates = { ...req.body, updatedAt: Date.now() };
+
+    if (updates.isPublished) {
+      const existing = await Form.findById(req.params.id).select('publicSlug');
+      if (!existing?.publicSlug) {
+        updates.publicSlug = Math.random().toString(36).slice(2, 10);
+      }
+    }
+
+    const form = await Form.findOneAndUpdate(
+      { _id: req.params.id, owner: req.userId },
+      updates,
+      { new: true, runValidators: true }
+    );
+    if (!form) return res.status(404).json({ message: 'Form not found' });
+    res.json(form);
+  } catch (err) { res.status(500).json({ message: err.message }); }
+});
+/*router.put('/:id', auth, async (req, res) => {
+  try {
     const form = await Form.findOneAndUpdate(
       { _id: req.params.id, owner: req.userId },
       { ...req.body, updatedAt: Date.now() },
@@ -49,7 +69,7 @@ router.put('/:id', auth, async (req, res) => {
     if (!form) return res.status(404).json({ message: 'Form not found' });
     res.json(form);
   } catch (err) { res.status(500).json({ message: err.message }); }
-});
+});*/
 
 // DELETE /api/forms/:id
 router.delete('/:id', auth, async (req, res) => {
